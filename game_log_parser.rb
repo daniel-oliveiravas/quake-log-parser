@@ -6,6 +6,7 @@ class GameLogParser
     @log_file = File.new(log_file_path)
     @players = Set.new
     @kill_by_player = Hash.new(0)
+    @total_kills = 0
   end
 
   def parse_log_file
@@ -21,6 +22,7 @@ class GameLogParser
         @kill_by_player[dead] -= 1
       end
 
+      @total_kills += 1
       add_player_to_list(dead)
     end
 
@@ -37,12 +39,8 @@ class GameLogParser
     @players.add(player) if is_player?(player)
   end
 
-  def total_kills
-    @kill_by_player.values.inject(:+)
-  end
-
   def print_result
-    result = { total_kills: total_kills,
+    result = { total_kills: @total_kills,
                players: @players.to_a,
                kills: @kill_by_player }
     puts result
