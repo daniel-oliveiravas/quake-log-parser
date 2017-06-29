@@ -17,6 +17,8 @@ class GameLogParser
       if is_player?(killer)
         add_player_to_list(killer)
         @kill_by_player[killer] += 1
+      else
+        @kill_by_player[dead] -= 1
       end
 
       add_player_to_list(dead)
