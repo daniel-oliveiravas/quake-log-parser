@@ -11,10 +11,9 @@ class GameLogParser
   def parse_log_file
     @log_file.each do |line|
       kill_action = line.match('.*:\s+(.*)\s+killed\s+(.*)\s+by\s+(.*)')
-      unless kill_action.nil?
-        killer, dead, death_type = kill_action.captures
-      end
+      next if kill_action.nil?
 
+      killer, dead, death_type = kill_action.captures
       if is_player?(killer)
         add_player_to_list(killer)
         @kill_by_player[killer] += 1
