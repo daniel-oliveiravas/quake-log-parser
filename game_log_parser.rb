@@ -2,6 +2,8 @@ require 'set'
 
 class GameLogParser
 
+  attr_reader :kill_by_player
+
   def initialize(log_file_path)
     @log_file = File.new(log_file_path)
     @players = Set.new
@@ -9,43 +11,34 @@ class GameLogParser
     @total_kills = 0
   end
 
+  def build_result
+    parse_log_file
+    @game_result = { total_kills: @total_kills,
+                     players: @players.to_a,
+                     kills: @kill_by_player }
+  end
+
+  private
+
   def parse_log_file
     @log_file.each do |line|
       kill_action = line.match('.*:\s+(.*)\s+killed\s+(.*)\s+by\s+(.*)')
       next if kill_action.nil?
 
       killer, dead, death_type = kill_action.captures
-      if is_player?(killer)
-        add_player_to_list(killer)
+      if player?(killer)
+        @players.add(killer)
         @kill_by_player[killer] += 1
       else
         @kill_by_player[dead] -= 1
       end
 
+      @players.add(dead)
       @total_kills += 1
-      add_player_to_list(dead)
     end
-
-    print_result
   end
 
-  private
-
-  def is_player?(player)
+  def player?(player)
     player != '<world>'
   end
-
-  def add_player_to_list(player)
-    @players.add(player) if is_player?(player)
-  end
-
-  def print_result
-    result = { total_kills: @total_kills,
-               players: @players.to_a,
-               kills: @kill_by_player }
-    puts result
-  end
 end
-
-log_file_path = Dir.pwd + '/log_sample/games.log'
-GameLogParser.new(log_file_path).parse_log_file
