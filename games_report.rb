@@ -10,6 +10,10 @@ class GamesReport
     @games << game
   end
 
+  def add_games(games)
+    @games.concat(games)
+  end
+
   def report
     build_result_printing_hash
     build_raking
@@ -39,6 +43,5 @@ game1 = GameLogParser.new(log_file_path)
 game2 = GameLogParser.new(log_file_path)
 
 game_report = GamesReport.new
-game_report.add_game(game1)
-game_report.add_game(game2)
+game_report.add_games([game1, game2])
 game_report.report
