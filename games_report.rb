@@ -37,11 +37,3 @@ class GamesReport
     puts result
   end
 end
-
-log_file_path = Dir.pwd + '/log_sample/games.log'
-game1 = GameLogParser.new(log_file_path)
-game2 = GameLogParser.new(log_file_path)
-
-game_report = GamesReport.new
-game_report.add_games([game1, game2])
-game_report.report
