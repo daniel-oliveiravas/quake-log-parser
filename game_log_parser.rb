@@ -18,8 +18,8 @@ class GameLogParser
   def build_result
     parse_log_file
     @game_result = { total_kills: @total_kills,
-                     players: @players.to_a,
-                     kills: @kill_by_player }
+                     players: @players.sort.to_a,
+                     kills: @kill_by_player.sort_by { |k, v| v }.reverse.to_h }
   end
 
   private
