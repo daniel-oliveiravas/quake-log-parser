@@ -12,14 +12,19 @@ class GameLogParser
     @log_file = File.new(log_file_path)
     @players = Set.new
     @kills_by_player = Hash.new(0)
+    @kills_by_death_type = Hash.new(0)
     @total_kills = 0
+    parse_log_file
   end
 
   def build_result
-    parse_log_file
     @game_result = { total_kills: @total_kills,
                      players: @players.sort.to_a,
-                     kills: @kills_by_player.sort_by { |k, v| v }.reverse.to_h }
+                     kills: sort_hash_by_value(@kills_by_player) }
+  end
+
+  def build_kills_by_means
+    { kills_by_means: sort_hash_by_value(@kills_by_death_type) }
   end
 
   private
@@ -39,7 +44,9 @@ class GameLogParser
         add_players(killer, dead)
         update_score(killer, POINTS_TO_WIN_BY_KILL)
       end
+
       @total_kills += 1
+      @kills_by_death_type[death_type] += 1
     end
   end
 
@@ -54,5 +61,9 @@ class GameLogParser
 
   def world?(actor)
     actor == WORLD
+  end
+
+  def sort_hash_by_value(hash)
+    hash.sort_by { |k, v| v }.reverse.to_h
   end
 end
