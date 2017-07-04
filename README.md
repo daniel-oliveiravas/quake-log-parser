@@ -34,6 +34,13 @@ GamesReport.new.add_games([first_game, second_game])
 To run the app, just execute this line in the project root folder:
 `ruby your_file_name.rb`
 
+#### Run Tests
+
+To run the tests you need to be in the test folder and run the test file. In the console:
+```
+cd test
+ruby game_log_parser_test.rb
+```
 
 #### Plus - Kills by means
 
@@ -43,12 +50,4 @@ To obtain the data about kills by death type, write a ruby file with the followi
 # Just change the value of the variable game_log_path with the path to your file
 game_log_path = '/path/to/game.log'
 GameLogParser.new(game_log_path).build_kills_by_means
-```
-
-#### Run Tests
-
-To run the tests you need to be in the test folder and run the test file. In the console:
-```
-cd test
-ruby game_log_parser_test.rb
 ```
