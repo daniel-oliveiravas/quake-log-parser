@@ -30,7 +30,7 @@ class GamesReport
   def build_raking
     result = Hash.new(0)
     @games.each do |game|
-      result = result.merge(game.kill_by_player) do |key, first_value, second_value|
+      result = result.merge(game.kills_by_player) do |key, first_value, second_value|
         first_value + second_value
       end
     end

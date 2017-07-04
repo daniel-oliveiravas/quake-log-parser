@@ -2,7 +2,7 @@ require 'set'
 
 class GameLogParser
 
-  attr_reader :kill_by_player
+  attr_reader :kills_by_player
 
   WORLD = '<world>'.freeze
   POINTS_TO_WIN_BY_KILL = 1
@@ -11,7 +11,7 @@ class GameLogParser
   def initialize(log_file_path)
     @log_file = File.new(log_file_path)
     @players = Set.new
-    @kill_by_player = Hash.new(0)
+    @kills_by_player = Hash.new(0)
     @total_kills = 0
   end
 
@@ -19,7 +19,7 @@ class GameLogParser
     parse_log_file
     @game_result = { total_kills: @total_kills,
                      players: @players.sort.to_a,
-                     kills: @kill_by_player.sort_by { |k, v| v }.reverse.to_h }
+                     kills: @kills_by_player.sort_by { |k, v| v }.reverse.to_h }
   end
 
   private
@@ -49,7 +49,7 @@ class GameLogParser
   end
 
   def update_score(player, points)
-    @kill_by_player[player] += points
+    @kills_by_player[player] += points
   end
 
   def world?(actor)
