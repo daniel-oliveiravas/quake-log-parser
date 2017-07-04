@@ -24,3 +24,8 @@ second_game = GameLogParser.new(second_game_log_path)
 GamesReport.new.add_games([first_game, second_game])
 ```
 
+To obtain the data about kills by death type:
+
+```ruby
+GameLogParser.new(game_log_path).build_kills_by_means
+```
