@@ -4,6 +4,10 @@ class GameLogParser
 
   attr_reader :kill_by_player
 
+  WORLD = '<world>'.freeze
+  POINTS_TO_WIN_BY_KILL = 1
+  POINTS_TO_LOSE_BY_DEATH = -1
+
   def initialize(log_file_path)
     @log_file = File.new(log_file_path)
     @players = Set.new
@@ -26,19 +30,29 @@ class GameLogParser
       next if kill_action.nil?
 
       killer, dead, death_type = kill_action.captures
-      if player?(killer)
-        @players.add(killer)
-        @kill_by_player[killer] += 1
-      else
-        @kill_by_player[dead] -= 1
-      end
 
-      @players.add(dead)
+      next if killer.empty? || dead.empty?
+
+      if world?(killer)
+        update_score(dead, POINTS_TO_LOSE_BY_DEATH)
+      else
+        add_players(killer, dead)
+        update_score(killer, POINTS_TO_WIN_BY_KILL)
+      end
       @total_kills += 1
     end
   end
 
-  def player?(player)
-    player != '<world>'
+  def add_players(killer, dead)
+    @players.add(killer)
+    @players.add(dead)
+  end
+
+  def update_score(player, points)
+    @kill_by_player[player] += points
+  end
+
+  def world?(actor)
+    actor == WORLD
   end
 end
